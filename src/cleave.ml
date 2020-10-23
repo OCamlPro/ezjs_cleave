@@ -48,8 +48,9 @@ class type cleave = object
   method setPhoneRegionCode : string_meth
 end
 
-let cleave : (Js.js_string Js.t -> options Js.t -> cleave Js.t) Js.constr =
-  Js.Unsafe.global##._Cleave
+type cleave_cs = (Js.js_string Js.t -> options Js.t -> cleave Js.t) Js.constr
+
+let cleave () : cleave_cs = Js.Unsafe.global##._Cleave
 
 let raw_options () : options Js.t = Js.Unsafe.obj [||]
 
@@ -81,6 +82,7 @@ let make_card ?(strict_mode=false) ?onchange ?gen_opt selector =
   begin match gen_opt with
     | None -> ()
     | Some gen_opt -> gen_opt options end;
+  let cleave = cleave () in
   new%js cleave (Js.string selector) options
 
 let make_phone ?gen_opt region_code selector =
@@ -90,6 +92,7 @@ let make_phone ?gen_opt region_code selector =
   begin match gen_opt with
     | None -> ()
     | Some gen_opt -> gen_opt options end;
+  let cleave = cleave () in
   new%js cleave (Js.string selector) options
 
 let make_date ?(date_pattern=["d"; "m"; "Y"]) ?gen_opt selector =
@@ -99,6 +102,7 @@ let make_date ?(date_pattern=["d"; "m"; "Y"]) ?gen_opt selector =
   begin match gen_opt with
     | None -> ()
     | Some gen_opt -> gen_opt options end;
+  let cleave = cleave () in
   new%js cleave (Js.string selector) options
 
 let make_time ?(time_pattern=["h"; "m"; "s"]) ?(time_format="24") ?gen_opt selector =
@@ -109,6 +113,7 @@ let make_time ?(time_pattern=["h"; "m"; "s"]) ?(time_format="24") ?gen_opt selec
   begin match gen_opt with
     | None -> ()
     | Some gen_opt -> gen_opt options end;
+  let cleave = cleave () in
   new%js cleave (Js.string selector) options
 
 let make_numeral ?(group_style="thousand") ?integer_scale ?(decimal_scale=2)
@@ -126,6 +131,7 @@ let make_numeral ?(group_style="thousand") ?integer_scale ?(decimal_scale=2)
   begin match gen_opt with
     | None -> ()
     | Some gen_opt -> gen_opt options end;
+  let cleave = cleave () in
   new%js cleave (Js.string selector) options
 
 let value cl = Js.to_string cl##getRawValue
